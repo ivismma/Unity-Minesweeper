@@ -2,6 +2,7 @@
 
 Desenvolvimento do jogo Minesweeper (Campo Minado) em ambiente Unity e C#.<br>
 Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
+- [v0.1](https://drive.google.com/drive/folders/19gcA9AAVsJlNWkiLAWmwGsL1JUTuml5G?usp=sharing)
 <hr>
 
 <h3>Comandos:</h3>
@@ -30,3 +31,4 @@ Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
 - Pensar em qual abordagem acima será usada pra garantir uma boa área de jogo no 1º clique;
 - Mostrar apenas minas não marcadas (flagged) quando atinge uma mina e perde;
 - Impl. melhor interface gráfica, outras stats e msg de fim de jogo;
+<hr>

@@ -7,10 +7,15 @@ Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
 
 <h3>Comandos:</h3>
 
->Clique esquerdo (LMB): Desbloqueia campo alvo.<br>
->Clique do meio (MMB): Desbloqueia todos os campos adjacentes (e diagonais) ao campo alvo.<br>
->Clique direito (RMB): Marca mina (bandeira).<br>
->R: Reinicia o jogo.<br>
+><b>Clique esquerdo (LMB)</b>: Desbloqueia campo alvo.<br>
+
+><b>Clique do meio (MMB)</b>: Desbloqueia todos os campos adjacentes (e diagonais) ao campo alvo.<br>
+>(Só é possível ser acionado quando houver no mínimo X minas marcadas ao redor do campo alvo sendo
+>X o número de minas ao redor do campo)
+
+><b>Clique direito (RMB)</b>: Marca mina (bandeira).<br>
+
+><b>R</b>: Reinicia o jogo.<br>
 
 <h3>Implementado:</h3>
 

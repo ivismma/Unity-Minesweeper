@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class Game : MonoBehaviour {
     public int width;     // linhas       default: 16
     public int height;    // colunas      default: 16
-    public int mineCount; // qtd. minas   default: 42
+    public int mineCount; // qtd. minas   default: 60
     
     private int tilesRevealed;
     private int tilesFlagged;

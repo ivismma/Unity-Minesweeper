@@ -15,6 +15,7 @@ public class Board : MonoBehaviour {
         tileMine,
         tileExploded,
         tileFlag,
+        tileWrongFlag,
         tileNum1,
         tileNum2,
         tileNum3,
@@ -43,14 +44,14 @@ public class Board : MonoBehaviour {
         }
     }
 
-    public void Draw(Cell[,] state) {
+    public void Draw(Cell[,] state, bool gameOver) {
         int width = state.GetLength(0);  // linhas
         int height = state.GetLength(1); // cols.
 
         for (int i = 0; i < width; ++i) {
             for (int j = 0; j < height; ++j) {
                 Cell cell = state[i, j];
-                tilemap.SetTile(cell.pos, GetTile(cell));
+                tilemap.SetTile(cell.pos, GetTile(cell, gameOver));
             }
         }
     }
@@ -68,7 +69,11 @@ public class Board : MonoBehaviour {
         }
     }
 
-    private Tile GetTile(Cell cell) {
+    private Tile GetTile(Cell cell, bool gameOver) {
+        // ao explodir, se tiver flags em lugares errados, exibe-as como flags verdes:
+        if (gameOver && cell.type != Cell.Type.Mine && cell.flagged == true)
+            return tileWrongFlag;
+        
         if (cell.revealed)
             return GetRevealedTile(cell);
         else if (cell.flagged)

@@ -9,8 +9,8 @@ public class Game : MonoBehaviour {
     public int width;     // linhas       default: 16
     public int height;    // colunas      default: 16
     public int mineCount; // qtd. minas   default: 42
+    
     private int tilesRevealed;
-
     private int tilesFlagged;
 
     private Board board;
@@ -26,23 +26,24 @@ public class Game : MonoBehaviour {
     }
 
     private void NewGame() {
+        // flags/counts:
+        gameOver = false;
         tilesRevealed = 0;
         tilesFlagged = 0;
 
+        // inicialização do grid:
         state = new Cell[width, height];
         GenerateCells();
-        GenerateMines();
-        GenerateNumbers();
 
-        //Camera.main.transform.position = new Vector3(width / 2f, height / 2f, -10f);
-        board.Draw(state);
+        // visual:
+        flagCounterUI.SetTotalMines(mineCount);
+        flagCounterUI.SetMarkedFlags(tilesFlagged);
+        
+        board.Draw(state, gameOver);
     }
 
     private void Start() {
-        gameOver = false;
         NewGame();
-        flagCounterUI.SetTotalMines(mineCount);
-        flagCounterUI.SetMarkedFlags(tilesFlagged);
     }
 
     private void GenerateCells() {
@@ -57,15 +58,26 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private void GenerateMines() {
-        int i, j;
+    // essa função impede que uma mina seja gerada na
+    // célula do 1º clique ou ao redor dela.
+    private bool IsNearCell(Cell cell, int pos_x, int pos_y) {
+        return (pos_x >= cell.pos.x - 1 && pos_x <= cell.pos.x + 1) &&
+               (pos_y >= cell.pos.y - 1 && pos_y <= cell.pos.y + 1);
+    }
+
+    private void GenerateMines(Cell cell) {
+        int firstClick_x = cell.pos.x,
+            firstClick_y = cell.pos.y;
+
         for(int k = 0; k < mineCount; ++k) {
-            i = Random.Range(0, width);
-            j = Random.Range(0, height);
-            
-            while (state[i,j].type == Cell.Type.Mine) {
+            int i = Random.Range(0, width);
+            int j = Random.Range(0, height);
+            cell = GetCell(i, j);
+
+            while (state[i,j].type == Cell.Type.Mine || IsNearCell(cell, firstClick_x, firstClick_y)) {
                 i = Random.Range(0, width);
                 j = Random.Range(0, height);
+                cell = GetCell(i, j);
             }
 
             state[i, j].type = Cell.Type.Mine;
@@ -142,18 +154,21 @@ public class Game : MonoBehaviour {
     private void Update() {
         if (Input.GetKey(KeyCode.R))
             Start();
-        else if (!gameOver) {
-            if (Input.GetMouseButtonDown(1)) // RMB
-                Flag();
-            else {
-                if (Input.GetMouseButtonDown(0)) // LMB
-                    Reveal();
-                else if (Input.GetMouseButtonDown(2)) // MMB
-                    RevealAround();
-                if (PlayerHasWon()) {
-                    Debug.Log("Você ganhou!");
-                    gameOver = true;
-                }
+
+        if (gameOver)
+            return;
+
+        if (Input.GetMouseButtonDown(1)) // RMB
+            Flag();
+        else {
+            if (Input.GetMouseButtonDown(0)) // LMB
+                Reveal();
+            else if (Input.GetMouseButtonDown(2)) // MMB
+                RevealAround();
+            
+            if (PlayerHasWon()) {
+                Debug.Log("Você ganhou!");
+                gameOver = true;
             }
         }
     }
@@ -176,9 +191,9 @@ public class Game : MonoBehaviour {
             tilesFlagged++;
         }
         flagCounterUI.SetMarkedFlags(tilesFlagged);
+
         state[cellPos.x, cellPos.y] = cell;
-        board.Draw(state);
-        Debug.Log(tilesRevealed);
+        board.Draw(state, gameOver);
     }
 
     private void RevealAround() {
@@ -193,16 +208,17 @@ public class Game : MonoBehaviour {
 
         for(int x = cellPos.x-1; x <= cellPos.x+1; ++x) {
             for (int y = cellPos.y - 1; y <= cellPos.y + 1; ++y) {
-                if (x >= 0 && x < width && y >= 0 && y < height) {
-                    Cell currentCell = GetCell(x, y);
-                    if ((x == cellPos.x && y == cellPos.y) || currentCell.revealed)
-                        continue;
-                    if (currentCell.flagged) {
-                        flagsFound++;
-                        continue;
-                    }
-                    toReveal.Add(currentCell);
+                if (!(x >= 0 && x < width && y >= 0 && y < height))
+                    continue;
+
+                Cell currentCell = GetCell(x, y);
+                if ((x == cellPos.x && y == cellPos.y) || currentCell.revealed)
+                    continue;
+                if (currentCell.flagged) {
+                    flagsFound++;
+                    continue;
                 }
+                toReveal.Add(currentCell);
             }
         }
 
@@ -212,13 +228,11 @@ public class Game : MonoBehaviour {
         foreach(Cell currentCell in toReveal) {
             if (currentCell.type == Cell.Type.Mine)
                 Explode(currentCell);
-            else {
-                //state[currentCell.pos.x, currentCell.pos.y].revealed = true;
+            else
                 Spread(currentCell);
-            }
         }
         
-        board.Draw(state);
+        board.Draw(state, gameOver);
     }
 
     private void Reveal() {
@@ -226,8 +240,14 @@ public class Game : MonoBehaviour {
         Vector3Int cellPos = board.tilemap.WorldToCell(worldPos);
         Cell cell = GetCell(cellPos.x, cellPos.y);
 
-        if(cell.type == Cell.Type.Invalid || cell.revealed || cell.flagged)
+        if (cell.type == Cell.Type.Invalid || cell.revealed || cell.flagged)
             return;
+
+        // primeiro clique: gera minas e números
+        if (tilesRevealed == 0) {
+            GenerateMines(cell);
+            GenerateNumbers();
+        }
 
         switch (cell.type) {
             case Cell.Type.Mine:
@@ -242,7 +262,7 @@ public class Game : MonoBehaviour {
                 state[cellPos.x, cellPos.y] = cell;
                 break;
         }
-        board.Draw(state);
+        board.Draw(state, gameOver);
     }
 
     // espalhar todos os campos vazios próximos recursivamente
@@ -254,7 +274,6 @@ public class Game : MonoBehaviour {
 
         tilesRevealed++;
         cell.revealed = true;
-        Debug.Log(cell.pos.x.ToString() + "," + cell.pos.y.ToString());
         state[cell.pos.x, cell.pos.y] = cell;
 
         if (cell.type == Cell.Type.Empty) {
@@ -282,7 +301,7 @@ public class Game : MonoBehaviour {
             for (int y = 0; y < height; ++y) {
                 cell = state[x, y];
 
-                if (cell.type == Cell.Type.Mine) {
+                if (cell.type == Cell.Type.Mine && cell.flagged == false) {
                     cell.revealed = true;
                     state[x, y] = cell;
                 }

@@ -2,7 +2,7 @@
 
 Desenvolvimento do jogo Minesweeper (Campo Minado) em ambiente Unity e C#.<br>
 Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
-- [v0.1](https://drive.google.com/drive/folders/19gcA9AAVsJlNWkiLAWmwGsL1JUTuml5G?usp=sharing)
+- [v0.2](https://drive.google.com/drive/folders/19gcA9AAVsJlNWkiLAWmwGsL1JUTuml5G?usp=sharing)
 <hr>
 
 <h3>Comandos:</h3>
@@ -26,14 +26,15 @@ Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
 - Espalhar (recursiva);
 - Marcar;
 - Explodir/Perder (e resposta gráfica);
-- Revelar ao redor.
-- Tratamento de Input
+- Revelar ao redor;
+- Prevenir atingir mina no primeiro clique do jogo (gerar minas a partir do 1º clique);
+- Geração de campo inicial (quadrado seguro ao redor do 1º clique);
+- Exibição de flags verdes ao perder o jogo, sinalizando onde houve o erro do jogador
+(flag verdes: área em que foi colocada bandeira, mas não há mina);
+- Tratamento de Input.
 
 <h3>Falta implementar:</h3>
 
-- Algumas melhorias qof;
-- Prevenir atingir mina no primeiro clique do jogo (gerar campo minado a partir do clique);
-- Pensar em qual abordagem acima será usada pra garantir uma boa área de jogo no 1º clique;
-- Mostrar apenas minas não marcadas (flagged) quando atinge uma mina e perde;
+- Algumas melhorias qof?;
 - Impl. melhor interface gráfica, outras stats e msg de fim de jogo;
 <hr>

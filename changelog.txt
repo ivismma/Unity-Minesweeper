@@ -16,7 +16,7 @@ verdes para exibir ao jogador onde foi o seu erro.
 mina de primeira.
 Ou seja, agora a geração do campo de jogo segue a ordem:
 1- Inicializa matriz;
-2- era Células; 
+2- Gera Células; 
 3- Aguarda 1º clique;
 4- Gera minas baseada na posição da 1ª célula clicada;
 5- Gera os campos números;

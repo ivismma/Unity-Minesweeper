@@ -69,17 +69,18 @@ public class Board : MonoBehaviour {
         }
     }
 
-    private Tile GetTile(Cell cell, bool gameOver) {
+    public Tile GetTile(Cell cell, bool gameOver) {
         // ao explodir, se tiver flags em lugares errados, exibe-as como flags verdes:
         if (gameOver && cell.type != Cell.Type.Mine && cell.flagged == true)
             return tileWrongFlag;
-        
+
         if (cell.revealed)
             return GetRevealedTile(cell);
         else if (cell.flagged)
             return tileFlag;
+        else if (cell.pressed)
+            return tileEmpty; // está sendo pressionada (mas não clicada)
         else
             return tileUnknown;
     }
-    
 }

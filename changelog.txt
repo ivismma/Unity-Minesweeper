@@ -12,16 +12,59 @@ verdes para exibir ao jogador onde foi o seu erro.
 
 - A lógica de geração de minas foi alterada:
   > As minas só são geradas após o 1º clique;
-  > Sendo assim, não é mais possível atingir uma 
-mina de primeira.
+  > Não é mais possível atingir uma mina de primeira pois agora 
+as minas são geradas apenas após o primeiro clique;
 Ou seja, agora a geração do campo de jogo segue a ordem:
-1- Inicializa matriz;
-2- Gera Células; 
-3- Aguarda 1º clique;
-4- Gera minas baseada na posição da 1ª célula clicada;
-5- Gera os campos números;
+Inicializa matriz;
+Gera Células; 
+Aguarda 1º clique;
+Gera minas baseada na posição da 1ª célula clicada;
+Gera os números;
   > É garantido também que todos os arredores do 1º clique
 sejam seguros (garantindo sempre que o quadrado ao redor do
 1º clique não possua nenhuma mina) -> Função IsNearCell().
 
 - Aumentado qtd. de minas de 42 pra 60.
+
+v0.3:
+
+- Adicionado interface visual (e interativa do jogo), focando um pouco 
+no campo minado original (Windows XP);
+
+- Tratamento do Input retrabalhado e implementação do do rastro (hover)
+de células quando o botão LMB ou MMB está sendo pressionado a fim de exibir 
+qual área será revelada caso o clique seja solto.
+Para isso, foi necessário:
+   > Criar uma classe que trabalha somente os inputs do jogo e realizar ações
+somente quando MouseUp (soltar o clique) for acionado.
+   > As classes mantém duas variáveis essenciais que representam um valor
+booleano indicando se LMB ou MMB está sendo pressionado.
+   > Pressionar o clique para baixo antes revelava e realizava ações, agora, 
+ele mostra um hover das células exibindo em tempo real a célula a ser marcada.
+
+- Re-modularização das classes, dividindo Game.cs em classes parciais
+e organizadas;
+
+- Criação de novo atributo na struct Cell (célula) "pressed" que representa um
+valor booleano indicando se a célula está sendo pressionada. Função GetTile 
+(classe Board) re-mapeada para exibir corretamente caso uma célula esteja sendo
+pressionada;
+
+- Com o tratamento de input retrabalhado, foi possível trabalhar as funções em
+Game.Effects.cs onde as ações de manter o clique pressionado sejam efetivadas.
+   > Na função de UpdateLMB, apenas uma variável mantém controle da célula pressionada
+atualmente para garantir que apenas uma célula seja exibida pressionada por vez. Sempre
+colocando de volta o atributo .pressed = false antes de exibir outra célula pressionada.
+   > Na função de UpdateMMB, a mesma lógica é usada, porém, como deverão ser pressionadas
+até 9 células ao mesmo tempo, a variável que guarda as células pressionadas é uma estrutura
+de dados que guarda todas as células que estão sendo pressionadas (List<Cell>).
+
+- Corrigido bug na situação em que bandeiras verdes seriam mostradas em campos 
+revelados recursivamente através do espalhamento de células (Spread) onde uma 
+bandeira tenha sido marcada na célula revelada antes do 1º clique do jogo;
+
+- Melhorias e redução de código;
+- Renomeado jogo de "Minesweeper" para "Minesweeper (Campo Minado)"
+- Adicionado ícone ao executável do jogo;
+- Sprites do botão principal adicionados aos assets do jogo. Por enquanto não interage 
+com o jogo, ainda sendo necessário pressionar R para reiniciar o jogo.

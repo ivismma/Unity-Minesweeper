@@ -20,6 +20,6 @@ public class FlagCounterUI : MonoBehaviour
 
     private void UpdateText(int value) {
         if(text != null)
-            text.text = $"Minas: {markedFlags}/{totalMines}";
+            text.text = $"{markedFlags}/{totalMines}";
     }
 }

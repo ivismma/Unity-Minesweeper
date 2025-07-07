@@ -1,8 +1,10 @@
 Mudanças:
-
+-------------------------------------
 v0.1:
+
 - Commit inicial
 
+-------------------------------------
 v0.2:
 
 - Introduzida ao jogo nova flag (verde). 
@@ -26,6 +28,7 @@ sejam seguros (garantindo sempre que o quadrado ao redor do
 
 - Aumentado qtd. de minas de 42 pra 60.
 
+-------------------------------------
 v0.3:
 
 - Adicionado interface visual (e interativa do jogo), focando um pouco 
@@ -68,3 +71,10 @@ bandeira tenha sido marcada na célula revelada antes do 1º clique do jogo;
 - Adicionado ícone ao executável do jogo;
 - Sprites do botão principal adicionados aos assets do jogo. Por enquanto não interage 
 com o jogo, ainda sendo necessário pressionar R para reiniciar o jogo.
+
+-------------------------------------
+v0.4:
+
+- Corrigido um bug em que caso bandeiras tenham sido posicionadas no início de uma rodada
+(antes do 1º clique) possibilitaria o 1º clique a revelar os campos marcados, causando a 
+revelação do campo marcado e dessincronização da contagem de bandeiras.

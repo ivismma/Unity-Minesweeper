@@ -35,6 +35,6 @@ Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
 
 <h3>Falta implementar:</h3>
 
-- Algumas melhorias qof?;
-- Impl. melhor interface gráfica, outras stats e msg de fim de jogo;
+- Impl. interação completa do Smiley Face;
+- Impl. melhor interface gráfica (?) e msg de fim de jogo.
 <hr>

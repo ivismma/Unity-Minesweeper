@@ -76,7 +76,7 @@ public partial class Game : MonoBehaviour {
     private void Spread(Cell cell) {
         if (state[cell.pos.x, cell.pos.y].revealed || cell.type == Cell.Type.Mine)
             return;
-        if (cell.type == Cell.Type.Invalid)
+        if (cell.type == Cell.Type.Invalid || cell.flagged)
             return;
 
         tilesRevealed++;

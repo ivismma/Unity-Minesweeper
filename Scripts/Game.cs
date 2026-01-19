@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 using System.Threading;
 using System.Collections.Generic;
 
 // classe da lógica do jogo e atributos
 public partial class Game : MonoBehaviour {
+    public static Game Instance { get; private set; }   
+
     // flags e count's importantes:
     public int width;     // linhas       default: 16
     public int height;    // colunas      default: 16
@@ -12,29 +15,45 @@ public partial class Game : MonoBehaviour {
     private int tilesRevealed;
     private int tilesFlagged;
     private bool gameOver;
-
+    
     // estruturas de dados essenciais:
     private Board board;            // grid (visual) do jogo
     private Cell[,] state;          // matriz de células
 
     // UI:
     private FlagCounterUI flagCounterUI;
-    private InputHandler inputhandler;
+    private InputHandler ih;
 
     private void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(this.gameObject);
+            Debug.LogWarning("Another instance of Game found, destroying it...");
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        
         board = GetComponentInChildren<Board>();
-        inputhandler = new InputHandler();
+        ih = InputHandler.Instance;
         unrevealedCellsAround = new List<Cell>();
 
         if (flagCounterUI == null)
-            flagCounterUI = FindObjectOfType<FlagCounterUI>();
+            flagCounterUI = FindFirstObjectByType<FlagCounterUI>();
     }
 
-    private void Start() {
+    public void Start() {
+        NewGame();
+    }
+
+    public void RestartGame() {
         NewGame();
     }
 
     private void NewGame() {
+        ih.Reset();
+
         // flags/counts:
         gameOver = false;
         tilesRevealed = 0;
@@ -47,6 +66,7 @@ public partial class Game : MonoBehaviour {
         GenerateCells();
 
         // visual:
+        setSmile(SmileStatus.Normal);
         flagCounterUI.SetTotalMines(mineCount);
         flagCounterUI.SetMarkedFlags(tilesFlagged);
 
@@ -56,24 +76,31 @@ public partial class Game : MonoBehaviour {
     private void Update() {
         HandleActions();
         HandleEffects();
-        
-        if (PlayerHasWon()) { Debug.Log("Você ganhou!"); gameOver = true; }
-    }
-
-    private void HandleActions() {
-        if (inputhandler.CheckGameRestart()) {
-            Start();
-            inputhandler.Reset();
-        }
 
         if (gameOver)
             return;
-        
-        if (inputhandler.HandleLeftClick())
+
+        if (PlayerHasWon()) { 
+            Debug.Log("Você ganhou!");
+
+            setSmile(SmileStatus.Winner);
+            RevealUnflaggedMines();
+			gameOver = true;
+		}
+    }
+
+    private void HandleActions() {
+        if (ih.HandleRestartKey())
+            NewGame();
+
+        if (gameOver)
+            return;
+
+        if (ih.HandleLeftClick())
             Reveal();
-        else if (inputhandler.HandleMiddleClick())
+        else if (ih.HandleMiddleClick())
             RevealAround();
-        else if (inputhandler.HandleRightClick())
+        else if (ih.HandleRightClick())
             Flag();
     }
 

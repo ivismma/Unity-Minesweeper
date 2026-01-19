@@ -1,7 +1,7 @@
 # Unity-Minesweeper
 
 Desenvolvimento do jogo Minesweeper (Campo Minado) em ambiente Unity e C#.<br>
-Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
+Focando em implementar melhorias QOF (quality-of-life), novas funcionalidades e gameplay fiel à versão clássica.
 - [build atual (Windows)](https://drive.google.com/drive/folders/19gcA9AAVsJlNWkiLAWmwGsL1JUTuml5G?usp=sharing)
 <hr>
 
@@ -32,9 +32,8 @@ Focando em implementar melhorias QOF (quality-of-life) e novas funcionalidades.
 - Exibição de flags verdes ao perder o jogo, sinalizando onde houve o erro do jogador
 (flag verdes: área em que foi colocada bandeira, mas não há mina);
 - Tratamento de Input.
+- Interação completa do Smile Face e feedback responsivo;
 
-<h3>Falta implementar:</h3>
-
-- Impl. interação completa do Smiley Face;
-- Impl. melhor interface gráfica (?) e msg de fim de jogo.
+<h3>Falta implementar (?):</h3>
+- Personalização de dificuldade e campo de jogo.
 <hr>

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public partial class Game : MonoBehaviour {
@@ -123,20 +124,13 @@ public partial class Game : MonoBehaviour {
     private void Explode(Cell cell) {
         gameOver = true;
 
+        setSmile(SmileStatus.Dead);
         cell.revealed = true;
         cell.exploded = true;
         state[cell.pos.x, cell.pos.y] = cell;
 
-        // exibir todas os campos não revelados do jogo antes de terminar:
-        for (int x = 0; x < width; ++x) {
-            for (int y = 0; y < height; ++y) {
-                cell = state[x, y];
 
-                if (cell.type == Cell.Type.Mine && cell.flagged == false) {
-                    cell.revealed = true;
-                    state[x, y] = cell;
-                }
-            }
-        }
+        // exibir todas os campos não revelados do jogo antes de terminar:
+        RevealMines();
     }
 }

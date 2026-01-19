@@ -16,6 +16,9 @@ public partial class Game : MonoBehaviour
         Vector3Int cellPos = board.tilemap.WorldToCell(worldPos);
         Cell cell = GetCell(cellPos.x, cellPos.y);
 
+        if (cell.flagged)
+            return;
+
         // isso evita torrar o CPU e GPU atualizando a tela freneticamente:
         if (cell.Equals(previousLMB_cell))
             return;
@@ -35,7 +38,7 @@ public partial class Game : MonoBehaviour
         }
 
         // LMB está sendo pressionado
-        if (inputhandler.leftclick_pressed) {
+        if (ih.leftclick_pressed) {
             cell.pressed = true;
             state[cell.pos.x, cell.pos.y] = cell;
             if (previousLMB_cell != new Cell() && !previousLMB_cell.Equals(cell)) {
@@ -51,7 +54,7 @@ public partial class Game : MonoBehaviour
 
     private void UpdateMMB() {
         // MMB não está sendo pressionado:
-        if (!inputhandler.middleclick_pressed) {
+        if (!ih.middleclick_pressed) {
             if (unrevealedCellsAround.Count > 0) {
                 // limpando lista após soltar botão (MMB):
                 foreach (Cell currentCell in unrevealedCellsAround)
@@ -105,4 +108,33 @@ public partial class Game : MonoBehaviour
             board.Draw(state, gameOver); // atualiza tela
         }
     }
+
+    private void RevealUnflaggedMines(){
+        Cell cell;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                cell = state[x, y];
+
+                if (cell.type == Cell.Type.Mine && cell.flagged == false) {
+                    cell.flagged = true;
+                    state[x, y] = cell;
+                }
+            }
+        }
+        board.Draw(state, gameOver);
+    }
+
+    private void RevealMines() {
+        Cell cell;
+		for (int x = 0; x < width; ++x) {
+			for (int y = 0; y < height; ++y) {
+				cell = state[x, y];
+
+				if (cell.type == Cell.Type.Mine && cell.flagged == false) {
+					cell.revealed = true;
+					state[x, y] = cell;
+				}
+			}
+		}
+	}
 }

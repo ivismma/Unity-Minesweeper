@@ -78,3 +78,21 @@ v0.4:
 - Corrigido um bug em que caso bandeiras tenham sido posicionadas no início de uma rodada
 (antes do 1º clique) possibilitaria o 1º clique a revelar os campos marcados, causando a 
 revelação do campo marcado e dessincronização da contagem de bandeiras.
+
+-------------------------------------
+v1.0:
+
+Importados todos os Sprites originais do Smile Face e...
+- Add. implementação visual e responsiva completa do SmileFace inspirado no jogo original, 
+com reações completas do SmileFace (Rosto default; pressionando o campo; morto e feliz quando
+se vence o jogo.
+Agora é possível reiniciar o jogo clicando no Smile Face normalmente e ainda é possível 
+pela tecla R que também aplica os efeitos visuais normalmente no Smile Face.
+
+Modificadas as classes Game e InputHandler:
+- Implementado padrão Singleton na classe principal do jogo (Game) e InputHandler.
+- Agora todas as minas não marcadas (flagged) são visualmente marcadas ao vencer o jogo.
+- Modificado input do RestartGame (tecla R) para leitura por GetKeyDown ao invés de GetKey
+para prevenir processamento excessivo enquanto R é pressionado. GetKeyDown reinicia o jogo
+apenas 1 vez (ou cada vez que a tecla R é pressionados).
+- Melhorias no tratamento de input e no código em geral.
